@@ -29,7 +29,7 @@ class ExcelFileCheck(object):
         rows = cur.fetchall()
         return rows
 
-    # Data 테이블 자료 확인
+    # 테이블 자료 확인
     def dbtable_zero_check(self, args):
         # args 테이블 이름
         sql_table_zero = 'SELECT COUNT(*) FROM ' + args
@@ -37,24 +37,29 @@ class ExcelFileCheck(object):
         with conn:
             result = self.select_task_by_priority(conn, sql_table_zero)
         conn.close()
-        return result
+        if result[0][0] == 0:
+            return True
+        else:
+            return False
 
     # Data 테이블 데이터 유무 확인. dbtable_zero_check method
     def dbtable_not_in_check(self, args):
-        if self.dbtable_zero_check(args) == 0:
-            return False
 
         sql_database_table_check = ''
-        sql_select_data_table = ''
+
         if args == '지원구분':
+            if self.dbtable_zero_check('Data'):
+                return False
             sql_database_table_check = 'SELECT T1.품명 FROM Data T1 WHERE T1.거래처 LIKE \'%어린이집\' AND T1.품명 NOT IN '
             sql_database_table_check += '(SELECT T2.품목 FROM 지원구분 T2)'
         elif args == '권역배정':
+            if self.dbtable_zero_check('Data'):
+                return False
             sql_database_table_check = 'SELECT T3.어린이집 FROM 권역배정 T3 WHERE T3.어린이집||\'어린이집\' NOT IN '
             sql_database_table_check += '(SELECT T1.거래처 FROM Data T1 WHERE T1.거래처 LIKE \'%어린이집\')'
-        elif args == 'Data':    # Data 테이블의 경우는 비교할게 없고 어린이집 빼고 삭제
-            sql_database_table_check = 'DELETE FROM Data WHERE 거래처 NOT LIKE \'%어린이집\''
-
+        elif args == 'Data':
+            sql_database_table_check = 'SELECT T1.품명 FROM Data T1 WHERE T1.거래처 LIKE \'%어린이집\' AND T1.품명 NOT IN '
+            sql_database_table_check += '(SELECT T2.품목 FROM 지원구분 T2)'
         conn = self.create_connection(self.database)
         with conn:
             result = self.select_task_by_priority(conn, sql_database_table_check)
@@ -63,7 +68,7 @@ class ExcelFileCheck(object):
 
     # Data 테이블에 어린이집 데이터만 파일로 출력
     def db_data_table_expert(self):
-        sql_select_data_table = 'SELECT * FROM Data'
+        sql_select_data_table = 'SELECT * FROM Data WHERE 거래처 LIKE \'%어린이집\''
         conn = self.create_connection(self.database)
         with conn:
             result = self.select_task_by_priority(conn, sql_select_data_table)
@@ -72,6 +77,4 @@ class ExcelFileCheck(object):
         # pyexcelerate 엑셀파일에 쓰기
         wb = Workbook()
         wb.new_sheet("Data", data=result)
-        wb.save('어린이집 Data.xlsx')
-
-
+        wb.save('어린이집Data.xlsx')

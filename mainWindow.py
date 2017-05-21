@@ -180,7 +180,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "어린이집처리 v1.4"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "어린이집처리 v1.5"))
         self.pushButton_rec2.setText(_translate("MainWindow", "거래명세서2"))
         self.pushButton_rec3.setText(_translate("MainWindow", "거래명세서3"))
         self.pushButton_sumPart.setText(_translate("MainWindow", "집행현황(분기)"))
@@ -245,10 +245,12 @@ class Ui_MainWindow(object):
                     out_range_data_string = ''.join(out_range_data[rows])
                     self.tableWidget.setItem(rows, 0, QtWidgets.QTableWidgetItem(out_range_data_string))
 
+                if comboboxSelect == 'Data':
+                    # Data 엑셀에서 '어린이집' 만 별도의 엑셀 파일로 출력
+                    excel_check.db_data_table_expert()
+
                 return
             else:
-                if comboboxSelect == 'Data':
-                    excel_check.db_data_table_expert()
                 # 업로드 확인 메세지박스
                 QMessageBox.information(msgbox_file_upload, "업로드 확인", "업로드가 완료되었습니다")
 
@@ -508,3 +510,4 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+
