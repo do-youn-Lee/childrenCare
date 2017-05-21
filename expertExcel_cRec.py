@@ -8,12 +8,20 @@ def expert_excel_cRec(results, *args):
     part_of_year = ''
     if start_month in ('03', '04', '05'):
         part_of_year = '1분기'
+        start_month = '03'
+        end_month = '05'
     elif start_month in ('06', '07', '08'):
         part_of_year = '2분기'
+        start_month = '06'
+        end_month = '08'
     elif start_month in ('09', '10', '11'):
         part_of_year = '3분기'
+        start_month = '09'
+        end_month = '11'
     elif start_month in ('12', '01', '02'):
         part_of_year = '4분기'
+        start_month = '12'
+        end_month = '01'
 
     now = datetime.datetime.now()
     # 출력할 엑셀 파일 이름
