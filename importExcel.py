@@ -49,6 +49,7 @@ class Import_Excel(object):
 
         worksheet = workbook.sheet_by_name(self.SheetName)
         nrows = worksheet.nrows     # 시트 전체 행 수
+        ncols = worksheet.ncols
         conn = self.createConnection(self.DbName)
 
         sql = 'DELETE FROM '+ self.SheetName
@@ -57,15 +58,26 @@ class Import_Excel(object):
         with conn:
             for row_num in range(1, nrows):
                 if self.SheetName == 'Data':
-                    project = (worksheet.cell_value(row_num, 0),
-                               worksheet.cell_value(row_num, 2),
-                               worksheet.cell_value(row_num, 3),
-                               worksheet.cell_value(row_num, 5),
-                               worksheet.cell_value(row_num, 6),
-                               worksheet.cell_value(row_num, 7),
-                               worksheet.cell_value(row_num, 8),
-                               worksheet.cell_value(row_num, 9)
-                               );
+                    if ncols == 14:
+                        project = (worksheet.cell_value(row_num, 0),
+                                   worksheet.cell_value(row_num, 2),
+                                   worksheet.cell_value(row_num, 3),
+                                   worksheet.cell_value(row_num, 5),
+                                   worksheet.cell_value(row_num, 6),
+                                   worksheet.cell_value(row_num, 7),
+                                   worksheet.cell_value(row_num, 8),
+                                   worksheet.cell_value(row_num, 9)
+                                   );
+                    else:
+                        project = (worksheet.cell_value(row_num, 0),
+                                   worksheet.cell_value(row_num, 1),
+                                   worksheet.cell_value(row_num, 2),
+                                   worksheet.cell_value(row_num, 3),
+                                   worksheet.cell_value(row_num, 4),
+                                   worksheet.cell_value(row_num, 5),
+                                   worksheet.cell_value(row_num, 6),
+                                   worksheet.cell_value(row_num, 7)
+                                   );
                 elif self.SheetName == '권역배정':
                     project = (worksheet.cell_value(row_num, 2),
                                worksheet.cell_value(row_num, 4),
