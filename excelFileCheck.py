@@ -51,15 +51,15 @@ class ExcelFileCheck(object):
             if self.dbtable_zero_check('Data'):
                 return False
             sql_database_table_check = 'SELECT T1.품명 FROM Data T1 WHERE T1.거래처 LIKE \'%어린이집\' AND T1.품명 NOT IN '
-            sql_database_table_check += '(SELECT T2.품목 FROM 지원구분 T2)'
+            sql_database_table_check += '(SELECT T2.품목 FROM 지원구분 T2) GROUP BY T1.품명'
         elif args == '권역배정':
             if self.dbtable_zero_check('Data'):
                 return False
             sql_database_table_check = 'SELECT T3.어린이집 FROM 권역배정 T3 WHERE T3.어린이집||\'어린이집\' NOT IN '
-            sql_database_table_check += '(SELECT T1.거래처 FROM Data T1 WHERE T1.거래처 LIKE \'%어린이집\')'
+            sql_database_table_check += '(SELECT T1.거래처 FROM Data T1 WHERE T1.거래처 LIKE \'%어린이집\') GROUP BY T3.어린이집'
         elif args == 'Data':
             sql_database_table_check = 'SELECT T1.품명 FROM Data T1 WHERE T1.거래처 LIKE \'%어린이집\' AND T1.품명 NOT IN '
-            sql_database_table_check += '(SELECT T2.품목 FROM 지원구분 T2)'
+            sql_database_table_check += '(SELECT T2.품목 FROM 지원구분 T2) GROUP BY T1.품명'
         conn = self.create_connection(self.database)
         with conn:
             result = self.select_task_by_priority(conn, sql_database_table_check)
