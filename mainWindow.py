@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 import sqlite3CreateTable
@@ -14,6 +15,8 @@ import expertExcel_sumPart
 import expertExcel_sumYear
 import expertExcel_cRec
 import excelFileCheck
+import clipboard
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -205,9 +208,6 @@ class Ui_MainWindow(object):
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1280, 21))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -237,7 +237,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "어린이집처리 v2.0"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "어린이집처리 v2.1"))
         self.pushButton_upFile.setText(_translate("MainWindow", "파일 업로드"))
         self.label.setText(_translate("MainWindow", "구분:"))
         self.label_3.setText(_translate("MainWindow", "처리기간"))
@@ -261,13 +261,18 @@ class Ui_MainWindow(object):
 
         # 날짜 세팅
         self.dateEdit_from.setDate(from_date)
-        # self.dateEdit_from.setText('20170301')
         self.dateEdit_to.setDate(to_date)
-        # self.dateEdit_to.setText('20170531')
+
+        # progress Bar
+        # self.progressBar = QProgressBar()
+        # self.progressBar.setRange(0, 10000)
+        # self.progressBar.setValue(0)
+        # self.progressBar.setGeometry(500, 200, 401, 31)
+        # self.progressBar.hide()
 
     def file_upload(self):
         msgbox_file_upload = QMessageBox()
-        msgbox_file_upload.setGeometry((MainWindow.geometry()))
+        msgbox_file_upload.setGeometry(MainWindow.geometry())
 
         comboboxSelect = self.comboBox_fileUpload.currentText()
 
@@ -279,11 +284,14 @@ class Ui_MainWindow(object):
         # dialog.exec_()
         ##################### 미완료 창닫기 처리 전 불가 #######
 
-        uploadFileName = QFileDialog.getOpenFileName(None, 'Open Excel File', '', 'Excel File (*.xlsx *.xlsm *.xls)')
+        try:
+            self.uploadFileName = QFileDialog.getOpenFileName(None, 'Open Excel File', '', 'Excel File (*.xlsx *.xlsm *.xls)')
+        except Exception as e:
+            print(e)
 
         # 업로드 파일 시트 확인
-        if uploadFileName:
-            importExecute = importExcel.Import_Excel(uploadFileName[0], comboboxSelect)
+        if self.uploadFileName:
+            importExecute = importExcel.Import_Excel(self.uploadFileName[0], comboboxSelect)
 
             if not importExecute.importExcel():
                 QMessageBox.information(msgbox_file_upload, 'Sheet 체크', '업로드 파일에 해당 시트가 없습니다')
@@ -299,9 +307,14 @@ class Ui_MainWindow(object):
                 # 포함하지 않는 자료 출력
                 self.tableWidget.setRowCount(len(out_range_data))
                 self.tableWidget.setColumnCount(1)
+                self.table_selected_item = ''  # clipboard 복사용 저장 변수
                 for rows in range(len(out_range_data)):
                     out_range_data_string = ''.join(out_range_data[rows])
                     self.tableWidget.setItem(rows, 0, QtWidgets.QTableWidgetItem(out_range_data_string))
+                    self.table_selected_item += out_range_data_string + '\n'    # clipboard 복사용 데이터 저장
+
+                # 선택 아이템 Ctrl+C to clipboard
+                clipboard.copy(self.table_selected_item)
 
                 if comboboxSelect == 'Data':
                     # Data 엑셀에서 '어린이집' 만 별도의 엑셀 파일로 출력
@@ -562,7 +575,6 @@ class Ui_MainWindow(object):
 
 
 if __name__ == "__main__":
-    import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
