@@ -2,11 +2,19 @@ import xlsxwriter
 import datetime
 
 
-def expert_excel_rec2(results):
+def expert_excel_rec2(results, part):
     # 출력할 엑셀 파일 이름
     now = datetime.datetime.now()
     file_name = '어린이집_거래명세서2(어린이집연합회)_'+ now.strftime('%Y%m%d_%H%M%S') + '.xlsx'
     now_date = str(now.year) + '년  ' + str(now.month) + '월  ' + str(now.day) + '일'  # 인수 날짜 세팅: 오늘 날짜
+    if part == '1분기':
+        part_for_year = '1분기:3월~5월'
+    elif part == '2분기':
+        part_for_year = '2분기:6월~8월'
+    elif part == '3분기':
+        part_for_year = '3분기:9월~11월'
+    elif part == '4분기':
+        part_for_year = '4분기:12월'
 
     workbook = xlsxwriter.Workbook(file_name)
     worksheet = workbook.worksheets()
@@ -75,7 +83,7 @@ def expert_excel_rec2(results):
             merge_line44_title = workbook.add_format({'align': 'center', 'bold': True, 'font_size': 18, 'left':2,
                                                      'right':2, 'bottom':2})
 
-            worksheet.merge_range('A2:H2', '1분기:3월~5월) 친환경 우리농산물 거래 명세서', merge_line2_title)
+            worksheet.merge_range('A2:H2', part_for_year+') 친환경 우리농산물 거래 명세서', merge_line2_title)
             worksheet.merge_range('A3:B6', '어린이집명', merge_line3_8_title)
             worksheet.merge_range('C3:D6', '', merge_line3_7_value)
             worksheet.merge_range('F3:H3', results[result_rows][5], merge_line3_7_value)

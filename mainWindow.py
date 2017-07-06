@@ -237,7 +237,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "어린이집처리 v2.1"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "어린이집처리 v2.2"))
         self.pushButton_upFile.setText(_translate("MainWindow", "파일 업로드"))
         self.label.setText(_translate("MainWindow", "구분:"))
         self.label_3.setText(_translate("MainWindow", "처리기간"))
@@ -367,6 +367,7 @@ class Ui_MainWindow(object):
         from_date = self.dateEdit_from.text()[:4] + self.dateEdit_from.text()[5:7] + self.dateEdit_from.text()[8:10]
         to_date = self.dateEdit_to.text()[:4] + self.dateEdit_to.text()[5:7] + self.dateEdit_to.text()[8:10]
         button_name = self.pushButton_rec2.text()
+        part_for_year = self.comboBox_3.currentText()
 
         select_db_data = selectDbData.SelectDatabase()
         results = select_db_data.select_database(from_date, to_date, custom_name, sale_divide, button_name)
@@ -383,7 +384,7 @@ class Ui_MainWindow(object):
                                              QtWidgets.QTableWidgetItem(str(results[result_rows][result_cols])))
 
             # ########### 결과값 엑셀 쓰기 #########
-            expertExcel_rec2.expert_excel_rec2(results)
+            expertExcel_rec2.expert_excel_rec2(results, part_for_year)
 
             # ############### 결과 완료 메세지 박스 ##################
             msgbox_recipt2 = QMessageBox()
