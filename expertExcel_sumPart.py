@@ -8,6 +8,27 @@ def expert_excel_sumPart(results, *args):
     now_date = str(now.year) + '년 ' + str(now.month) + '월'  # 기준일 날짜 세팅: 오늘 날짜 + 말일
     file_name = '어린이집_집행현황('+args[1]+')_'+args[0]+'_'+now.strftime('%Y%m%d_%H%M%S') + '.xlsx'
 
+    # 분기 처리: 해당 분기 첫 월을 넘김
+    month1 = ''
+    month2 = ''
+    month3 = ''
+    if args[1] == '1분기':
+        month1 = '3월'
+        month2 = '4월'
+        month3 = '5월'
+    elif args[1] == '2분기':
+        month1 = '6월'
+        month2 = '7월'
+        month3 = '8월'
+    elif args[1] == '3분기':
+        month1 = '9월'
+        month2 = '10월'
+        month3 = '11월'
+    elif args[1] == '4분기':
+        month1 = '12월'
+        month2 = '1월'
+        month3 = '2월'
+
     workbook = xlsxwriter.Workbook(file_name)
 
     worksheet_name = '집행현황(' + args[1] + ')_' + args[0]  # 뒤에 '어린이집' 은 빼고 시트이름
@@ -31,9 +52,9 @@ def expert_excel_sumPart(results, *args):
     worksheet.merge_range('A4:A5', '어린이집', line_title_format)
     worksheet.merge_range('B4:B5', args[1] + ' 배정액', line_title_format)
     worksheet.merge_range('C4:F4', '집 행 액', line_title_format)
-    worksheet.write('C5', '3월', line_title_format)
-    worksheet.write('D5', '4월', line_title_format)
-    worksheet.write('E5', '5월', line_title_format)
+    worksheet.write('C5', month1, line_title_format)
+    worksheet.write('D5', month2, line_title_format)
+    worksheet.write('E5', month3, line_title_format)
     worksheet.write('F5', '계', line_title_format)
     worksheet.merge_range('G4:G5', '잔액', line_title_format)
     worksheet.merge_range('H4:H5', '비고', line_title_format)

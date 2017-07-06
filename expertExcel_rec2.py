@@ -7,6 +7,8 @@ def expert_excel_rec2(results, part):
     now = datetime.datetime.now()
     file_name = '어린이집_거래명세서2(어린이집연합회)_'+ now.strftime('%Y%m%d_%H%M%S') + '.xlsx'
     now_date = str(now.year) + '년  ' + str(now.month) + '월  ' + str(now.day) + '일'  # 인수 날짜 세팅: 오늘 날짜
+
+    part_for_year = ''
     if part == '1분기':
         part_for_year = '1분기:3월~5월'
     elif part == '2분기':
@@ -91,7 +93,7 @@ def expert_excel_rec2(results, part):
             worksheet.merge_range('F5:H5', results[result_rows][6], merge_line3_7_value)
             worksheet.merge_range('F6:H6', results[result_rows][7], merge_line3_7_value)
             worksheet.merge_range('A7:B8', '납품업체명', merge_line3_8_title)
-            worksheet.merge_range('C7:D8', '굿츠친환경노동조합법인', merge_line3_7_value)
+            worksheet.merge_range('C7:D8', '굿츠친환경영농조합법인', merge_line3_7_value)
             worksheet.merge_range('E7:E8', '배정액', merge_line3_8_title)
             worksheet.merge_range('F7:F8', '=' + results[result_rows][8], merge_line8_value)
             worksheet.merge_range('C36:D36', '=SUM(C10:C35)', merge_line36_value_right)
