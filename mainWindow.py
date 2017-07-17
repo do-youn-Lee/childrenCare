@@ -237,7 +237,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "어린이집처리 v2.2"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "어린이집처리 v2.3"))
         self.pushButton_upFile.setText(_translate("MainWindow", "파일 업로드"))
         self.label.setText(_translate("MainWindow", "구분:"))
         self.label_3.setText(_translate("MainWindow", "처리기간"))
@@ -442,13 +442,17 @@ class Ui_MainWindow(object):
             return
 
         # 구분 처리: 쿼리에서 <> 로 처리하게 되므로 반대로 넣음
+        part_dist_dis = ''
         part_dist = ''
         if self.comboBox_2.currentText() == '총괄':
+            part_dist_dis = '총괄'
             part_dist = '총괄'
         elif self.comboBox_2.currentText() == '쌀':
-            part_dist = '제주산30%'
-        elif self.comboBox_2.currentText() == '제주산':
+            part_dist_dis = '제주산30%'
             part_dist = '국내산70%'
+        elif self.comboBox_2.currentText() == '제주산':
+            part_dist_dis = '국내산70%'
+            part_dist = '제주산30%'
 
         # 분기 처리: 해당 분기 첫 월을 넘김
         part_for_year = ''
@@ -462,7 +466,7 @@ class Ui_MainWindow(object):
             part_for_year = '12'
 
         select_db_data = selectDbData.SelectDatabase()
-        results = select_db_data.select_database(part_for_year, part_dist, custom_name, sale_divide, button_name, from_date[:4])
+        results = select_db_data.select_database(part_for_year, part_dist_dis, custom_name, sale_divide, button_name, from_date[:4])
 
         if results:
             self.tableWidget.clearContents()
@@ -501,16 +505,20 @@ class Ui_MainWindow(object):
             return
 
         # 구분 처리: 쿼리에서 <> 로 처리하게 되므로 반대로 넣음
+        part_dist_dis = ''
         part_dist = ''
         if self.comboBox_2.currentText() == '총괄':
+            part_dist_dis = '총괄'
             part_dist = '총괄'
         elif self.comboBox_2.currentText() == '쌀':
-            part_dist = '제주산30%'
-        elif self.comboBox_2.currentText() == '제주산':
+            part_dist_dis = '제주산30%'
             part_dist = '국내산70%'
+        elif self.comboBox_2.currentText() == '제주산':
+            part_dist_dis = '국내산70%'
+            part_dist = '제주산30%'
 
         select_db_data = selectDbData.SelectDatabase()
-        results = select_db_data.select_database(part_dist, sale_divide, custom_name, from_date[:4], button_name)
+        results = select_db_data.select_database(part_dist_dis, sale_divide, custom_name, from_date[:4], button_name)
 
         if results:
             self.tableWidget.clearContents()
