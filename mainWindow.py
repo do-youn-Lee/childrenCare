@@ -532,7 +532,7 @@ class Ui_MainWindow(object):
                                              QtWidgets.QTableWidgetItem(str(results[result_rows][result_cols])))
 
             # ########### 결과값 엑셀 쓰기 #########
-            expertExcel_sumYear.expert_excel_sumYear(results, part_dist, self.comboBox_3.currentText(), from_date[:4])
+            expertExcel_sumYear.expert_excel_sumYear(results, part_dist, from_date[:4])
 
             # ############### 결과 완료 메세지 박스 ##################
             msgbox_sumYear = QMessageBox()

@@ -90,9 +90,9 @@ class SelectDatabase(object):
                     IFNULL(CASE WHEN SUM(T1.금액)=0 THEN 0 ELSE SUM(T1.금액) END, 0) AS '합계'
                 FROM Data T1, 지원구분 T2
                 WHERE T1.품명 = T2.품목
-                AND T2.구분내용 <> ?                
+                AND T2.구분내용 <> ?             
+                AND T1.구분 =  ?
                 AND T1.거래처 LIKE ?
-                AND T1.구분 =  ?                
                 AND STRFTIME('%Y',DATE('1899-12-30', '+'||T1.거래날짜||' DAYS'))= ?
                 AND T2.구분내용 <> '자가결제'
                 GROUP BY T1.거래처) TT1

@@ -3,15 +3,15 @@ import datetime
 
 
 def expert_excel_sumYear(results, *args):
-    # args: part_dist, self.comboBox_3.currentText(), from_date[:4]
+    # args: part_dist, from_date[:4]
     # 출력할 엑셀 파일 이름
     now = datetime.datetime.now()
     now_date = str(now.year) + '년 ' + str(now.month) + '월' + str(now.day) + '일' # 기준일 날짜 세팅: 오늘 날짜 + 말일
-    file_name = '어린이집_집행현황('+args[2]+'년)_'+args[0]+'_'+now.strftime('%Y%m%d_%H%M%S') + '.xlsx'
+    file_name = '어린이집_집행현황('+args[1]+'년)_'+args[0]+'_'+now.strftime('%Y%m%d_%H%M%S') + '.xlsx'
 
     workbook = xlsxwriter.Workbook(file_name)
 
-    worksheet_name = '집행현황(' + args[2] + '년)_' + args[0]  # 뒤에 '어린이집' 은 빼고 시트이름
+    worksheet_name = '집행현황(' + args[1] + '년)_' + args[0]  # 뒤에 '어린이집' 은 빼고 시트이름
     worksheet = workbook.add_worksheet(worksheet_name)
 
     # ########################################### 시트 상단 ##################################################
@@ -25,7 +25,7 @@ def expert_excel_sumYear(results, *args):
     line3_format_tail = workbook.add_format({'font_size': 11, 'align': 'right'})
     line_title_format = workbook.add_format({'font_size':11, 'align':'center', 'valign':'vcenter', 'bold':True, 'border':2, 'bg_color':'#92CDDB'})
 
-    worksheet.merge_range('A1:O1',args[2] + '년 월별 친환경우리농산물 급식지원금액 집행현황('+ args[0] + ')', line1_format)
+    worksheet.merge_range('A1:O1',args[1] + '년 월별 친환경우리농산물 급식지원금액 집행현황('+ args[0] + ')', line1_format)
     worksheet.merge_range('A2:O2', '')
     worksheet.merge_range('A3:D3', '업체명: 굿츠친환경영농조합법인', line3_format_front)
     worksheet.merge_range('M3:O3', '기준일: ' + now_date + '까지 ', line3_format_tail)
